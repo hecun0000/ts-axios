@@ -1,5 +1,12 @@
 import { TypeOfMap } from '../types'
 
+/**
+ *判断参数类型
+ *
+ * @export
+ * @param {*} obj 判断的对象
+ * @returns {string}  返回值
+ */
 export function typeOf(obj: any): string {
   const toString = Object.prototype.toString
   const map: TypeOfMap = {
@@ -17,6 +24,17 @@ export function typeOf(obj: any): string {
   return map[toString.call(obj)]
 }
 
+
+/**
+ *联合类型
+ *
+ * @export
+ * @template T
+ * @template U
+ * @param {T} to
+ * @param {U} from
+ * @returns {(T & U)}
+ */
 export function extend<T, U>(to: T, from: U): T & U {
   for (const key in from) {
     ;(to as T & U)[key] = from[key] as any
@@ -24,6 +42,13 @@ export function extend<T, U>(to: T, from: U): T & U {
   return to as T & U
 }
 
+/**
+ *合并 config 参数
+ *
+ * @export
+ * @param {...any[]} objs 需要合并的参数
+ * @returns {*} 合并后结果
+ */
 export function deepMerge(...objs: any[]): any {
   const result = Object.create(null)
 

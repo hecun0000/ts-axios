@@ -1,5 +1,11 @@
 import { typeOf } from './utils'
 
+/**
+ *将特殊字符进行转义
+ *
+ * @param {string} val
+ * @returns {string}
+ */
 function encode(val: string): string {
   return encodeURIComponent(val)
     .replace(/%40/g, '@')
@@ -11,6 +17,14 @@ function encode(val: string): string {
     .replace(/%5D/gi, ']')
 }
 
+/**
+ *生成请求 url
+ *
+ * @export
+ * @param {string} url 请求地址
+ * @param {*} [params] 蚕食
+ * @returns {string} 最终请求地址
+ */
 export function buildURl(url: string, params?: any): string {
   if (!params) {
     return url

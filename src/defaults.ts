@@ -2,6 +2,8 @@ import { AxiosRequestConfig } from './types'
 import { processHeaders } from './helper/headers'
 import { transformRequest, transformResponse } from './helper/data'
 
+
+// 定义默认配置
 const defaults: AxiosRequestConfig = {
   method: 'get',
 

@@ -1,5 +1,14 @@
 import { AxiosTransformer } from '../types'
 
+/**
+ * 处理 链式调用
+ *
+ * @export
+ * @param {*} data
+ * @param {*} headers
+ * @param {(AxiosTransformer | AxiosTransformer[])} [fns]
+ * @returns {*}
+ */
 export default function transform(
   data: any,
   headers: any,

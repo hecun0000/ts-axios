@@ -1,6 +1,12 @@
 import { typeOf, deepMerge } from './utils'
 import { Method } from '../types'
 
+/**
+ *格式化 headers 中的 属性
+ *
+ * @param {*} headers
+ * @param {string} nomalizedName
+ */
 function nomalizeHeaderName(headers: any, nomalizedName: string): void {
   if (!headers) {
     return
@@ -13,6 +19,14 @@ function nomalizeHeaderName(headers: any, nomalizedName: string): void {
   })
 }
 
+/**
+ *处理 headers 默认配置
+ * 
+ * @export
+ * @param {*} headers 
+ * @param {*} data
+ * @returns {*} 处理后 header 
+ */
 export function processHeaders(headers: any, data: any): any {
   nomalizeHeaderName(headers, 'Content-Type')
   if (typeOf(data) === 'object') {
@@ -24,7 +38,7 @@ export function processHeaders(headers: any, data: any): any {
 }
 
 /**
- * 处理headers
+ * 处理headers 与传入的header 进行合并
  * @param headers 传入的headers
  * @param method 请求方式
  */

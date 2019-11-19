@@ -36,6 +36,14 @@ stratKeysFromVal2.forEach(key => {
   strats[key] = fromVal2Strat
 })
 
+/**
+ * 配置合并
+ *
+ * @export
+ * @param {AxiosRequestConfig} config1
+ * @param {AxiosRequestConfig} config2
+ * @returns 合并后的配置
+ */
 export default function mergeConfig(config1: AxiosRequestConfig, config2: AxiosRequestConfig) {
   if (!config2) {
     config2 = {}

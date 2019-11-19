@@ -5,6 +5,13 @@ interface Interceptor<T> {
   rejected?: RejectedFn
 }
 
+/**
+ *拦截器实例
+ *
+ * @export
+ * @class InterceptorManager
+ * @template T
+ */
 export default class InterceptorManager<T> {
   private interceptors: Array<Interceptor<T> | null>
 

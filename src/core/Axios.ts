@@ -21,6 +21,12 @@ interface PromiseChain<T> {
   rejected?: RejectedFn
 }
 
+/**
+ * axios 实例
+ *
+ * @export
+ * @class Axios
+ */
 export default class Axios {
   defaults: AxiosRequestConfig
 

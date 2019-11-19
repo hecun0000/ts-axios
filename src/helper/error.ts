@@ -1,5 +1,12 @@
 import { AxiosRequestConfig, AxiosResponse } from '../types'
 
+/**
+ *处理异常错误信息
+ *
+ * @export
+ * @class AxiosError
+ * @extends {Error}
+ */
 export class AxiosError extends Error {
   isAxiosError: boolean
   config: AxiosRequestConfig
@@ -25,6 +32,17 @@ export class AxiosError extends Error {
   }
 }
 
+/**
+ *创建错误信息
+ *
+ * @export
+ * @param {string} message
+ * @param {AxiosRequestConfig} config
+ * @param {(string | null)} [code]
+ * @param {*} [request]
+ * @param {AxiosResponse} [response]
+ * @returns
+ */
 export function createError(
   message: string,
   config: AxiosRequestConfig,
