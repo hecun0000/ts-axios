@@ -1,6 +1,6 @@
 import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from '../types'
 import xhr from './xhr'
-import { buildURl } from '../helper/url'
+import { buildURl, isAbsoluteURL, combineURl } from '../helper/url'
 import { flattenHeaders } from '../helper/headers'
 import transform from './transform'
 
@@ -12,6 +12,7 @@ import transform from './transform'
  * @returns {AxiosPromise}
  */
 export default function dispatchRequest(config: AxiosRequestConfig): AxiosPromise {
+  throwIfCancellationRequested(config)
   processConfig(config)
   return xhr(config).then(res => {
     return transformResponseData(res)
@@ -19,7 +20,7 @@ export default function dispatchRequest(config: AxiosRequestConfig): AxiosPromis
 }
 
 /**
- *请求前处理配置
+ * 请求前处理配置
  *
  * @param {AxiosRequestConfig} config
  */
@@ -35,9 +36,12 @@ function processConfig(config: AxiosRequestConfig): void {
  * @param {AxiosRequestConfig} config
  * @returns {string}
  */
-function transformURL(config: AxiosRequestConfig): string {
-  const { url, params } = config
-  return buildURl(url!, params)
+export function transformURL(config: AxiosRequestConfig): string {
+  let { url, params, paramsSerializer, baseUrl } = config
+  if (baseUrl && !isAbsoluteURL(url!)) {
+    url = combineURl(baseUrl, url)
+  }
+  return buildURl(url!, params, paramsSerializer)
 }
 
 /**
@@ -49,4 +53,10 @@ function transformURL(config: AxiosRequestConfig): string {
 function transformResponseData(res: AxiosResponse): AxiosResponse {
   res.data = transform(res.data, res.headers, res.config.transformResponse)
   return res
+}
+
+function throwIfCancellationRequested(config: AxiosRequestConfig): void {
+  if (config.cancelToken) {
+    config.cancelToken.throwIfRequested()
+  }
 }

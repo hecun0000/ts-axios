@@ -15,7 +15,7 @@ export type Method =
   | 'patch'
   | 'PATCH'
 
-  // 请求配置
+// 请求配置
 export interface AxiosRequestConfig {
   url?: string
   method?: Method
@@ -26,10 +26,24 @@ export interface AxiosRequestConfig {
   timeout?: number
   transformRequest?: AxiosTransformer | AxiosTransformer[]
   transformResponse?: AxiosTransformer | AxiosTransformer[]
+  cancelToken?: CancelToken
+  withCredentials?: boolean
+  xsrfCookieName?: string
+  xsrfHeaderName?: string
+  onDownloadProgress?: (e: ProgressEvent) => void
+  onUploadProgress?: (e: ProgressEvent) => void
+  auth?: AxiosBasicCredentials
+  validateStatus?: (status: number) => boolean
+  paramsSerializer?: (parmas: any) => string
+  baseUrl?: string
 
   [propName: string]: any
 }
 
+interface AxiosBasicCredentials {
+  username: string
+  password: string
+}
 // typeOF 方法提供
 export interface TypeOfMap {
   [key: string]: string
@@ -57,7 +71,6 @@ export interface AxiosError extends Error {
   response?: AxiosResponse
 }
 
-
 // axios 实例
 export interface Axios {
   defaults: AxiosRequestConfig
@@ -81,6 +94,8 @@ export interface Axios {
   put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>
 
   patch<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>
+
+  getUri: (config: AxiosRequestConfig) => string
 }
 
 // 重载 请求方式
@@ -92,6 +107,20 @@ export interface AxiosInstance extends Axios {
 // create 静态方法
 export interface AxiosStatic extends AxiosInstance {
   create(config?: AxiosRequestConfig): AxiosInstance
+
+  CancelToken: CancelTokenStatic
+  Cancel: CancelStatic
+  isCancel: (value: any) => boolean
+
+  all<T>(promise: Array<T | Promise<T>>): Promise<T[]>
+
+  spread<T, R>(callback: (...args: T[]) => R): (arr: T[]) => R
+
+  Axios: AxiosClassStatic
+}
+
+export interface AxiosClassStatic {
+  new (config: AxiosRequestConfig): Axios
 }
 
 // 拦截器
@@ -113,4 +142,37 @@ export interface RejectedFn {
 // 请求前后的链式调用
 export interface AxiosTransformer {
   (data: any, headers?: any): any
+}
+
+export interface CancelToken {
+  promise: Promise<Cancel>
+  reason?: Cancel
+
+  throwIfRequested(): void
+}
+
+export interface Canceler {
+  (message?: string): void
+}
+
+export interface CancelExecutor {
+  (cancel: Canceler): void
+}
+
+export interface CancelTokenSource {
+  token: CancelToken
+  cancel: Canceler
+}
+
+export interface CancelTokenStatic {
+  new (executor: CancelExecutor): CancelToken
+  source(): CancelTokenSource
+}
+
+export interface Cancel {
+  message?: string
+}
+
+export interface CancelStatic {
+  new (message?: string): Cancel
 }

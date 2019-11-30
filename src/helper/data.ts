@@ -1,7 +1,7 @@
 import { typeOf } from './utils'
 
 /**
- *处理请求数据
+ * 处理请求数据
  *
  * @export
  * @param {*} data
@@ -15,7 +15,7 @@ export function transformRequest(data: any): any {
 }
 
 /**
- *处理响应诗句
+ * 处理响应诗句
  *
  * @export
  * @param {*} data

@@ -1,7 +1,7 @@
 import { TypeOfMap } from '../types'
 
 /**
- *判断参数类型
+ * 判断参数类型
  *
  * @export
  * @param {*} obj 判断的对象
@@ -24,9 +24,8 @@ export function typeOf(obj: any): string {
   return map[toString.call(obj)]
 }
 
-
 /**
- *联合类型
+ * 联合类型
  *
  * @export
  * @template T
@@ -43,7 +42,7 @@ export function extend<T, U>(to: T, from: U): T & U {
 }
 
 /**
- *合并 config 参数
+ * 合并 config 参数
  *
  * @export
  * @param {...any[]} objs 需要合并的参数
@@ -70,4 +69,26 @@ export function deepMerge(...objs: any[]): any {
   })
 
   return result
+}
+
+/**
+ * 判断是不是 FormData
+ *
+ * @export
+ * @param {*} val
+ * @returns {val is FormData}
+ */
+export function isFormData(val: any): val is FormData {
+  return typeof val !== 'undefined' && val instanceof FormData
+}
+
+/**
+ * 判断是不是 URLSearchParams
+ *
+ * @export
+ * @param {*} val
+ * @returns {val is URLSearchParams}
+ */
+export function isURLSearchParams(val: any): val is URLSearchParams {
+  return typeof val !== 'undefined' && val instanceof URLSearchParams
 }

@@ -1,7 +1,7 @@
 import { AxiosRequestConfig, AxiosResponse } from '../types'
 
 /**
- *处理异常错误信息
+ * 处理异常错误信息
  *
  * @export
  * @class AxiosError
@@ -33,7 +33,7 @@ export class AxiosError extends Error {
 }
 
 /**
- *创建错误信息
+ * 创建错误信息
  *
  * @export
  * @param {string} message

@@ -31,6 +31,13 @@ axios.request({
   console.log(res)
 })
 
+function test1() {
+  return new Promise(resolve=>{
+    resolve()
+  })
+}
+
+test1()
 
 axios.get('/extend/get')
 axios.options('/extend/options')

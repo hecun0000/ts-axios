@@ -7,9 +7,10 @@ import {
   RejectedFn
 } from '../types'
 
-import dispatchRequest from './dispatchRequest'
-import { typeOf, deepMerge } from '../helper/utils'
+import dispatchRequest, { transformURL } from './dispatchRequest'
+import { typeOf } from '../helper/utils'
 import InterceptorManager from './InterceptorManager'
+import mergeConfig from './mergeConfig'
 
 interface Interceptors {
   request: InterceptorManager<AxiosRequestConfig>
@@ -49,7 +50,7 @@ export default class Axios {
     } else {
       config = url
     }
-    config = deepMerge(this.defaults, config)
+    config = mergeConfig(this.defaults, config)
 
     const chain: PromiseChain<any>[] = [
       {
@@ -73,7 +74,7 @@ export default class Axios {
       promise = promise.then(resolved, rejected)
     }
 
-    return promise
+    return promise as AxiosPromise
   }
 
   get(url: string, config?: AxiosRequestConfig): AxiosPromise {
@@ -102,6 +103,11 @@ export default class Axios {
 
   patch(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise {
     return this._requestMethodWithData('patch', url, data, config)
+  }
+
+  getUri(config: AxiosRequestConfig): string {
+    config = mergeConfig(this.defaults, config)
+    return transformURL(config)
   }
 
   _requestMethodWithData(method: Method, url: string, data?: any, config?: AxiosRequestConfig) {

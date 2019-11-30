@@ -18,11 +18,7 @@ app.use(webpackDevMiddleware(compiler, {
 
 app.use(webpackHotMiddleware(compiler))
 
-app.use(express.static(__dirname, {
-  setHeaders(res) {
-    res.cookie('XSRF-TOKEN-D', 'hecun')
-  }
-}))
+app.use(express.static(__dirname))
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
@@ -41,7 +37,6 @@ registerExtendRouter()
 registerInterceptorRouter()
 registerConfigRouter()
 registerCancelRouter()
-registerMoreRouter()
 
 
 app.use(router)
@@ -168,23 +163,4 @@ function registerCancelRouter() {
       res.json(req.body);
     }, 1000);
   });
-}
-
-
-function registerMoreRouter() {
-  router.get("/more/get", function (req, res) {
-    setTimeout(function () {
-      res.json("hello");
-    }, 1000);
-  });
-
-  router.get("/more/304", function (req, res) {
-    setTimeout(function () {
-      res.status(304);
-      res.end()
-    }, 1000);
-  });
-
-
-
 }
