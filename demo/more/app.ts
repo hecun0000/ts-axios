@@ -80,7 +80,7 @@ const a = instance.get('/more/get')
 const b = instance.get('/more/get')
 
 axios.all([a, b]).then(axios.spread(function (a, b) {
-  console.log(a.data, b.data)
+  console.log(a.data, b)
 }))
 
 

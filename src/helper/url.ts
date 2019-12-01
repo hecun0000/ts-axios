@@ -13,7 +13,7 @@ interface URLOrigin {
  * @returns {string}
  */
 function encode(val: string): string {
-  return encodeURIComponent(val)
+  return decodeURIComponent(val)
     .replace(/%40/g, '@')
     .replace(/%3A/gi, ':')
     .replace(/%24/g, '$')
@@ -100,14 +100,28 @@ function resolveURL(url: string): URLOrigin {
   return { protocol, host }
 }
 
+/**
+ * 判断是不是绝对路径
+ *
+ * @export
+ * @param {string} url
+ * @returns {boolean}
+ */
 export function isAbsoluteURL(url: string): boolean {
-  return /(^[a-z][a-z\d\+\-\.]*:)?\/\//i.test(url)
+  return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url)
 }
 
+/**
+ * 拼接 请求 url
+ *
+ * @export
+ * @param {string} baseUrl
+ * @param {string} [relativeURL]
+ * @returns {string}
+ */
 export function combineURl(baseUrl: string, relativeURL?: string): string {
   if (relativeURL) {
     const res = baseUrl.replace(/\/+$/, '') + '/' + relativeURL.replace(/^\/+/, '')
-    console.log(res)
   }
 
   return relativeURL ? baseUrl.replace(/\/+$/, '') + '/' + relativeURL.replace(/^\/+/, '') : baseUrl

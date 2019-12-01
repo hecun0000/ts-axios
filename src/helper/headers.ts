@@ -57,3 +57,21 @@ export function flattenHeaders(headers: any, method: Method): any {
 
   return headers
 }
+
+/** 将headers字符串转为对象
+ *
+ *
+ * @param headers responseHeaderStr
+ */
+export function parseHeaders(headers: string): { [index: string]: any } {
+  let parsed = Object.create(null)
+  if (!headers) return parsed
+  headers.split('\r\n').forEach(str => {
+    let [key, ...val] = str.split(':')
+    const varStr = val.join(':')
+    key = key.trim().toLowerCase()
+    if (!key) return
+    if (varStr) parsed[key] = varStr.trim()
+  })
+  return parsed
+}

@@ -3,6 +3,7 @@ import { createError } from '../helper/error'
 import { isURLSameOrigin } from '../helper/url'
 import cookie from '../helper/cookie'
 import { isFormData } from '../helper/utils'
+import { parseHeaders } from '../helper/headers'
 
 /**
  * xhr 请求
@@ -103,7 +104,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
           data: responseData,
           status: request.status,
           statusText: request.statusText,
-          headers: responseHeaders,
+          headers: parseHeaders(responseHeaders),
           config,
           request
         }
@@ -117,16 +118,25 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
 
       // 请求超时
       request.ontimeout = function handleTimeOut() {
-        reject(createError('Time of ' + timeout, config, 'ECONNABORTED', request))
+        reject(
+          createError('Timeout of ' + timeout + ' ms exceeded', config, 'ECONNABORTED', request)
+        )
       }
     }
 
     function processCancel(): void {
       if (cancelToken) {
-        const test = cancelToken.promise.then(reason => {
-          request.abort()
-          reject(reason)
-        })
+        cancelToken.promise
+          .then(reason => {
+            request.abort()
+            reject(reason)
+          })
+          .catch(
+            /* istanbul ignore next */
+            () => {
+              // do nothing
+            }
+          )
       }
     }
 
