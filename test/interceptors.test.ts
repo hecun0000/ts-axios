@@ -11,7 +11,7 @@ describe('axios 实例方法测试', () => {
   })
 
   describe('request 拦截测试', () => {
-    test('拦截器测试', () => {
+    test('拦截器测试', done => {
       const request = axios.create({
         timeout: 300
       })
@@ -27,28 +27,35 @@ describe('axios 实例方法测试', () => {
       })
 
       request.interceptors.response.use(response => {
-        response.data.hecun = 'jy'
+        response.data.errno += 'jy'
+        // response.data.hecun = 'jy'
         return response
       })
       let response: AxiosResponse
-      request.get('/foo').then(res => {
-        response = res
-      })
+      request
+        .get('/foo')
+        .then(res => {
+          response = res
+        })
+        .then(next)
 
       getAjaxRequest().then(res => {
         res.respondWith({
-          status: 200
-        })
-        setTimeout(() => {
-          expect(response.config.timeout).toBe(300)
-          expect(response.config.withCredentials).toBeFalsy()
-          expect(response.config.headers.test).toBe('hecun')
-          expect(response.data.hecun).toBe('jy')
+          status: 200,
+          responseText: '{"errno": 0}'
         })
       })
+
+      function next() {
+        expect(response.config.timeout).toBe(2000)
+        expect(response.config.withCredentials).toBeTruthy()
+        expect(response.config.headers.test).toBe('hecun')
+        expect(response.data.errno).toBe('0jy')
+        done()
+      }
     })
 
-    test('拦截器 删除', () => {
+    test('拦截器 删除', done => {
       const request = axios.create({
         baseUrl: 'http://hecun.site',
         timeout: 300
@@ -70,21 +77,26 @@ describe('axios 实例方法测试', () => {
       request.interceptors.response.eject(id)
       request.interceptors.response.eject(5)
       let response: AxiosResponse
-      request.get('/foo').then(res => {
-        response = res
-      })
+      request
+        .get('/foo')
+        .then(res => {
+          response = res
+        })
+        .then(next)
 
       getAjaxRequest().then(res => {
+        expect(res.url).toBe('http://hecun.site/foo')
         res.respondWith({
           status: 200
         })
-        setTimeout(() => {
-          expect(res.url).toBe('http://hecun.site/foo')
-          expect(response.config.timeout).toBe(300)
-          expect(response.config.withCredentials).toBeFalsy()
-          expect(response.data.hecun).toBeUndefined()
-        })
       })
+
+      function next() {
+        expect(response.config.timeout).toBe(2000)
+        expect(response.config.withCredentials).toBeTruthy()
+        expect(response.data.hecun).toBeUndefined()
+        done()
+      }
     })
   })
 })
