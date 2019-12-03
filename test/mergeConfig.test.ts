@@ -6,7 +6,7 @@ import axios, {
 } from '../src/index'
 import { getAjaxRequest } from './helper'
 
-describe('axios 实例方法测试', () => {
+describe('mergeConfig', () => {
   beforeEach(() => {
     jasmine.Ajax.install()
   })
@@ -15,12 +15,13 @@ describe('axios 实例方法测试', () => {
     jasmine.Ajax.uninstall()
   })
 
-  describe('create 测试', () => {
-    test('getUri 方法', done => {
+  describe('mergeConfig', () => {
+    test('参数合并 方法', done => {
       const config: AxiosRequestConfig = {
         baseUrl: 'http://hecun.site',
-        post: {
-          headers: {
+        timeout: 300,
+        headers: {
+          post: {
             hecun: 'test'
           }
         }
@@ -33,22 +34,23 @@ describe('axios 实例方法测试', () => {
           '/foo',
           {},
           {
+            timeout: 100,
             headers: {
               hecun: 'jy',
               'content-type': 'application/json'
             }
           }
         )
-        .then(() => {
-          done()
+        .then(res => {
+          setTimeout(() => {
+            expect(res.config.headers.hecun).toBe('jy')
+            expect(res.config.timeout).toBe(100)
+            expect(res.config.headers['Content-Type']).toBe('application/json')
+            done()
+          }, 200)
         })
 
       getAjaxRequest().then(res => {
-        setTimeout(() => {
-          expect(res.requestHeaders.hecun).toBe('jy')
-          expect(res.requestHeaders['Content-Type']).toBe('application/json')
-        }, 200)
-
         res.respondWith({
           status: 200
         })

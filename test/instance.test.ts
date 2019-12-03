@@ -135,6 +135,11 @@ describe('axios 实例方法测试', () => {
       expect(axios.getUri(config)).toBe('http://hecun.site/foo?a=1&b={"a":"false"}')
     })
 
+    test('getUri 方法 传递参数 为 null', () => {
+      // @ts-ignore
+      expect(axios.getUri(null)).toBeUndefined()
+    })
+
     test('transformRequest 方法', done => {
       const request = axios.create({
         timeout: 300,
