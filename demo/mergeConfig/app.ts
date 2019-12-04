@@ -27,7 +27,6 @@ axios({
   transformResponse: [
     ...(axios.defaults.transformResponse as AxiosTransformer[]),
     function (data) {
-      debugger
       if (typeof data === 'object') {
         data.b = 2
       } else {

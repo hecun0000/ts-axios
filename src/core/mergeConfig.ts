@@ -14,7 +14,6 @@ function fromVal2Strat(val1: any, val2: any): any {
 }
 
 function deepMergeStrat(val1: any, val2: any): any {
-  debugger
   if (typeOf(val2) === 'object') {
     return deepMerge(val1, val2)
   } else if (typeof val2 !== 'undefined') {
